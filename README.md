@@ -2,17 +2,28 @@
 
 ## 快速开始
 
-从[比赛网站]((https://www.datafountain.cn/competitions/603/datasets))下载训练数据集 `training_dataset`, 解压后放到 `data` 目录下。
+clone 仓库到本地
+
+```bash
+git clone https://github.com/v-liuwei/DF603.git
+```
+
+然后从[比赛网站](https://www.datafountain.cn/competitions/603/datasets)下载数据集, 解压后放到 `data` 目录下。
 
 文件结构参考：
 ```text
-data/
-├── training_dataset/
-│   ├── daily_dataset.csv
-│   ├── hourly_dataset.csv
-│   └── ...
+DF603/
+├── data/
+|   ├── training_dataset/
+|   |   ├── daily_dataset.csv
+|   |   ├── hourly_dataset.csv
+|   |   └── ...
+|   ├── sample_submission.csv
+|   └── test_public.csv
 ├── results/
 |   ├── figs/
+|   |   ├── *.png
+|   |   └── ...
 |   └── ...
 └── src/
     ├── *.py
