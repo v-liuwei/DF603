@@ -2,11 +2,10 @@ from matplotlib import pyplot as plt
 import numpy as np
 import pandas as pd
 import math
-from preprocess import load_raw
 from config import data_dir, result_dir, fig_dir
 
 
-def plot_flows(df: pd.DataFrame, n_cols: int = 2, single_figsize: tuple = (10, 10), samples_per_tick: int = 7, save_path = None):
+def plot_flows(df: pd.DataFrame, n_cols: int = 2, single_figsize: tuple = (10, 10), samples_per_tick: int = 24*7, save_path = None):
     """
     Plot all flow columns along time in subplots.
     """
@@ -28,11 +27,11 @@ def plot_flows(df: pd.DataFrame, n_cols: int = 2, single_figsize: tuple = (10, 1
 
 
 if __name__ == "__main__":
-    daily_data = load_raw(data_dir / 'daily_dataset.csv')
+    daily_data = pd.read_csv(data_dir / 'daily_dataset.csv')
     plot_flows(daily_data, samples_per_tick=30, save_path=fig_dir / 'daily_flows_raw.png')
 
-    hourly_data = load_raw(data_dir / 'hourly_dataset.csv')
+    hourly_data = pd.read_csv(data_dir / 'hourly_dataset.csv')
     plot_flows(hourly_data, samples_per_tick=24*7, save_path=fig_dir / 'figs/hourly_flows_raw.png')
 
-    per5min_data = load_raw(data_dir / 'per5min_dataset.csv')
+    per5min_data = pd.read_csv(data_dir / 'per5min_dataset.csv')
     plot_flows(per5min_data, samples_per_tick=12*24*7, save_path=fig_dir / 'figs/per5min_flows_raw.png')
