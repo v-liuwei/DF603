@@ -4,8 +4,8 @@ import matplotlib.pyplot as plt
 from config import fig_dir
 
 
-def MSLE(y_true, y_pred):
-    return np.mean(np.square(np.log1p(y_pred) - np.log1p(y_true)))
+def score(y_true, y_pred):
+    return 1 / (1 + (np.square(np.log1p(y_pred) - np.log1p(y_true))).mean(axis=0).sum())
 
 
 if __name__ == "__main__":

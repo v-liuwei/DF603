@@ -5,12 +5,14 @@ from plot_data import plot_flows
 from functools import partial
 
 
-def load_raw(path):
+def load_raw(path, time_col: str = 'time'):
     """
     Load raw data.
     """
     df = pd.read_csv(path)
-    df['time'] = pd.to_datetime(df['time'])
+    df['time'] = pd.to_datetime(df[time_col])
+    if time_col != 'time':
+        df = df.drop(columns=time_col)
     return df
 
 
@@ -45,7 +47,7 @@ def detect_outlier_by_iqr(df: pd.DataFrame, threshold: float = 1.5):
     return is_outlier
 
 
-def clean_data(df: pd.DataFrame, outlier_detect_func: callable = detect_outlier_by_zscore):
+def clean_data(df: pd.DataFrame, outlier_detect_func: callable = detect_outlier_by_zscore, fillna: bool = True):
     """
     Clean data by replacing abnormal values(negatives or outliers) with NaNs, and then filling them groupby weekday.
     """
@@ -62,11 +64,12 @@ def clean_data(df: pd.DataFrame, outlier_detect_func: callable = detect_outlier_
         print(is_outlier.sum())
         df[is_outlier] = np.nan
 
-    # forward fill and then back fill NaNs
-    # try to group by weekday+time
-    df[flow_cols] = df[flow_cols].groupby(df['time'].dt.strftime('%u%H%M')).apply(lambda x: x.fillna(method='ffill').fillna(method='bfill'))
-    # then group by time
-    df[flow_cols] = df[flow_cols].groupby(df['time'].dt.strftime('%H%M')).apply(lambda x: x.fillna(method='ffill').fillna(method='bfill'))
+    if fillna:
+        # forward fill and then back fill NaNs
+        # try to group by weekday+time
+        df[flow_cols] = df[flow_cols].groupby(df['time'].dt.strftime('%u%H%M')).apply(lambda x: x.fillna(method='ffill').fillna(method='bfill'))
+        # then group by time
+        df[flow_cols] = df[flow_cols].groupby(df['time'].dt.strftime('%H%M')).apply(lambda x: x.fillna(method='ffill').fillna(method='bfill'))
     return df
 
 
