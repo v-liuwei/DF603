@@ -106,19 +106,19 @@ def get_submission(data_dict, col_dict):
             gbm = lgb.train(params, train_set)
             models.append(gbm)
 
-        # for i in tqdm(range(len(test_split))):
-        #     train = pd.concat([train, test_split.iloc[i:i+1]], axis=0).reset_index(drop=True)
-        #     train_featured = feature_engineering(train.iloc[-169:], col_dict)
-        #     sample = train_featured.iloc[-1:][feature_cols]
-        #     pred = np.array([model.predict(sample) for model in models]).reshape(-1)
-        #     test_split.loc[test_split.index[i], target_cols] = pred
-        #     train.loc[train.index[-1], target_cols] = pred
-        train = pd.concat([train, test_split], axis=0)
-        train_featured = feature_engineering(train, col_dict)
-        sample = train_featured.iloc[-len(test_split):][feature_cols]
-        pred = np.stack([model.predict(sample) for model in models], axis=1)
-        test_split[target_cols] = pred
-        train.loc[test_split.index, target_cols] = pred
+        for i in tqdm(range(len(test_split))):
+            train = pd.concat([train, test_split.iloc[i:i+1]], axis=0).reset_index(drop=True)
+            train_featured = feature_engineering(train.iloc[-169:], col_dict)
+            sample = train_featured.iloc[-1:][feature_cols]
+            pred = np.array([model.predict(sample) for model in models]).reshape(-1)
+            test_split.loc[test_split.index[i], target_cols] = pred
+            train.loc[train.index[-1], target_cols] = pred
+        # train = pd.concat([train, test_split], axis=0)
+        # train_featured = feature_engineering(train, col_dict)
+        # sample = train_featured.iloc[-len(test_split):][feature_cols]
+        # pred = np.stack([model.predict(sample) for model in models], axis=1)
+        # test_split[target_cols] = pred
+        # train.loc[test_split.index, target_cols] = pred
         tests.append(test_split)
     return pd.concat(tests, axis=0)
 
@@ -130,9 +130,9 @@ if __name__ == "__main__":
 
     evaluation(data_dict, col_dict)
 
-    # submission = get_submission(data_dict, col_dict)
-    # # save submission
-    # submission.to_csv(result_dir / f'submission_{timestamp}.csv', index=False)
+    submission = get_submission(data_dict, col_dict)
+    # save submission
+    submission.to_csv(result_dir / f'submission_{timestamp}.csv', index=False)
 
-    # # plot flows
-    # plot_flows(submission, save_dir=fig_dir / f'submission_{timestamp}')
+    # plot flows
+    plot_flows(submission, save_dir=fig_dir / f'submission_{timestamp}')

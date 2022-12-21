@@ -30,19 +30,25 @@ DF603/
     └── ...
 ```
 
-## 可能要做的事情
+### 运行方式
+
+```sh
+.../DF603 $ pip install -r requirements.txt
+.../DF603 $ cd src
+.../DF603/src $ python darts_based.py
+```
+
+## 关键步骤
 
 ### 数据处理
 
 - [x] 数据可视化, 见 `src/plot_data.py`
 - [x] 异常值处理, 见 `src/preprocess_data.py`
 - [x] 缺失值处理, 见 `src/preprocess_data.py`
-- [ ] 特征工程
+- [x] 特征工程，见 `src/preprocess_data.py`
 
-PS: 可以执行 `src/preprocess_data.py` 对比处理前后的可视化结果，看看效果如何，是否可以改进处理方法。
+### 模型构建
 
-### 预测方法
-
-- [x] 基于简单规则的方法，比如~~直接复制前一周的训练数据(?)，效果应该还可以~~
-- [x] 基于机器学习的方法，如 LightGBM
+- [x] 基于简单规则的方法，比如直接复制前一周的训练数据，见 `src/rule_based.py`
+- [x] 基于机器学习的方法，如 LightGBM，见 `src/darts_based.py` (基于 `darts` 库) 和 `src/lightgbm_based` (基于 `lightgbm` 库)
 - [ ] 基于深度学习的方法，如 LSTM

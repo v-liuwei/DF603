@@ -6,8 +6,10 @@ from darts import TimeSeries
 from darts.models import LightGBMModel, ExponentialSmoothing
 from tqdm import tqdm
 
+from plot_data import plot_flows
 from preprocess import prepare_all
 from utils import score
+from config import result_dir, fig_dir
 
 
 class NaiveModel:
@@ -76,9 +78,9 @@ if __name__ == '__main__':
         print("model {} obtains score: {:.2f}%".format(model, score(val[col_dict['flow']].values(), pred[col_dict['flow']].values())))
     eval_model(model, train, val)
 
-    # submission = get_submission(data_dict, model)
-    # # save submission
-    # submission.to_csv(result_dir / f'submission_{timestamp}.csv', index=False)
+    submission = get_submission(data_dict, model)
+    # save submission
+    submission.to_csv(result_dir / f'submission_{timestamp}.csv', index=False)
 
-    # # plot flows
-    # plot_flows(submission, save_dir=fig_dir / f'submission_{timestamp}')
+    # plot flows
+    plot_flows(submission, save_dir=fig_dir / f'submission_{timestamp}')
